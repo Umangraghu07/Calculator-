@@ -1,0 +1,38 @@
+const screen = document.getElementById('screen');
+
+function appendValue(value) {
+    if (screen.value === 'Error') {
+        screen.value = '';
+    }
+    screen.value += value;
+}
+
+function clearScreen() {
+    screen.value = '';
+}
+
+function deleteLast() {
+    if (screen.value === 'Error') {
+        screen.value = '';
+    } else {
+        screen.value = screen.value.slice(0, -1);
+    }
+}
+
+function calculate() {
+    try {
+        if (screen.value.trim() === '') return;
+        
+        // Using Function instead of eval for safer execution
+        const result = new Function(`return ${screen.value}`)();
+        
+        if (result === Infinity || isNaN(result)) {
+            screen.value = 'Error';
+        } else {
+            // Limits long decimal values automatically
+            screen.value = Number(result.toFixed(4)).toString();
+        }
+    } catch (error) {
+        screen.value = 'Error';
+    }
+}
